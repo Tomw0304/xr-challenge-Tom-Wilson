@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
             // Accelerates backwards until a top speed 
             if (rb.velocity.magnitude < 20f)
             {
-                rb.AddForce(transform.backward * 10000);
+                rb.AddForce(-transform.forward * 10000);
             }
         }
     }
