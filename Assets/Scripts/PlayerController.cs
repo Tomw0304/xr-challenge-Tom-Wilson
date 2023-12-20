@@ -10,7 +10,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //initialise the rigidbody variable
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
