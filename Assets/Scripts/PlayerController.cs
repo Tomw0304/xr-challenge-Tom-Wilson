@@ -14,8 +14,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Update is at 50 times per second
+    void FixedUpdate()
     {
         
     }
