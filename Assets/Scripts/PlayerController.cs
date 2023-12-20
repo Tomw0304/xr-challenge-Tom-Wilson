@@ -21,14 +21,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             // Use velovity at lower speed to create an instant start and at the max speed to cap the speed
-            if (rb.velocity.magnitude < 5f)
+            if (rb.velocity.magnitude < 1f)
             {
-                rb.velocity = transform.forward * 100;
+                rb.velocity = transform.forward * 10;
             }
             // Accelerate inbetween the start and reaching a top speed
             else if (rb.velocity.magnitude < 100f)
             {
-                rb.AddForce(transform.forward * 10000);
+                rb.AddForce(transform.forward * 1000);
             }
         }
 
@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
             // Accelerates backwards until a top speed 
             if (rb.velocity.magnitude < 20f)
             {
-                rb.AddForce(-transform.forward * 10000);
+                rb.AddForce(-transform.forward * 1000);
             }
         }
     }
