@@ -35,11 +35,7 @@ public class PlayerController : MonoBehaviour
         // Move backward
         if (Input.GetKey(KeyCode.S))
         {
-            // Accelerates backwards until a top speed 
-            if (rb.velocity.magnitude < 20f)
-            {
-                rb.AddForce(-transform.forward * 1000);
-            }
+            rb.AddForce(-transform.forward * 1000);
         }
     }
 }
