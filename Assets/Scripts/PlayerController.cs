@@ -7,11 +7,13 @@ public class PlayerController : MonoBehaviour
     // Create variable to store the rigidbody of the player
     private Rigidbody rb;
 
-    // Initialise a boolean variable to store whether the player is rotated
+    // Initialise two boolean variables to store whether the player is rotated left or right
     private bool rotatingLeft = false;
+    private bool rotatingRight = false;
 
-    // Initialise a variable to store the time since the start of the rotation
-    private float rotatingTime = 0.0f;
+    // Initialise two variables to store the time since the start of the rotation left or right
+    private float rotatingTimeLeft = 0.0f;
+    private float rotatingTimeRight = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -52,19 +54,20 @@ public class PlayerController : MonoBehaviour
 
 
         // Resets the rotation variable when the rotation is complete
-        if (rotatingTime >= 0.1f)
+        if (rotatingTimeLeft >= 0.1f)
         {
             rotatingLeft = false;
-            rotatingTime = 0.0f;
+            rotatingTimeLeft = 0.0f;
         }
+
         // Rotating the player 45 degrees to the left for a specific time
-        if (rotatingLeft && rotatingTime < 0.1f)
+        if (rotatingLeft && rotatingTimeLeft < 0.1f)
         {
             // Increment the rotatingTime
-            rotatingTime += Time.deltaTime;
+            rotatingTimeLeft += Time.deltaTime;
 
             // Calculate the interpolation factor based on the fraction of the rotating time elapsed
-            float t = Mathf.Clamp01(rotatingTime / 0.1f);
+            float t = Mathf.Clamp01(rotatingTimeLeft / 0.1f);
 
             // Initalise the current rotation to the player's current rotation
             Vector3 currentRotation = transform.rotation.eulerAngles;
@@ -77,6 +80,42 @@ public class PlayerController : MonoBehaviour
 
             // Rotate the player to the targetRotation
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, t);        
+        }
+
+        // Turns right
+        if (Input.GetKey(KeyCode.D))
+        {
+            rotatingRight = true;
+        }
+
+
+        // Resets the rotation variable when the rotation is complete
+        if (rotatingTimeRight >= 0.1f)
+        {
+            rotatingRight = false;
+            rotatingTimeRight = 0.0f;
+        }
+
+        // Rotating the player 45 degrees to the right for a specific time
+        if (rotatingRight && rotatingTimeRight < 0.1f)
+        {
+            // Increment the rotatingTime
+            rotatingTimeRight += Time.deltaTime;
+
+            // Calculate the interpolation factor based on the fraction of the rotating time elapsed
+            float t = Mathf.Clamp01(rotatingTimeRight / 0.1f);
+
+            // Initalise the current rotation to the player's current rotation
+            Vector3 currentRotation = transform.rotation.eulerAngles;
+
+            // Add 45 degrees to the Y axis rotation
+            currentRotation.y += 45;
+
+            // Create euler rotation with transformed angle
+            Quaternion targetRotation = Quaternion.Euler(currentRotation);
+
+            // Rotate the player to the targetRotation
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, t);
         }
     }
 }
