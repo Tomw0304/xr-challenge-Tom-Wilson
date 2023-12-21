@@ -31,12 +31,12 @@ public class PlayerController : MonoBehaviour
             // Use velovity at lower speed to create an instant start and at the max speed to cap the speed
             if (rb.velocity.magnitude < 1f)
             {
-                rb.velocity = transform.forward * 10;
+                rb.velocity = transform.forward;
             }
             // Accelerate inbetween the start and reaching a top speed
             else if (rb.velocity.magnitude < 100f)
             {
-                rb.AddForce(transform.forward * 1000);
+                rb.AddForce(transform.forward * 100);
             }
         }
 
