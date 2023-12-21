@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // Update is at 50 times per second
-    void FixedUpdate()
+    // Updates every frame
+    void Update()
     {
         // Move forward
         if (Input.GetKey(KeyCode.W))
@@ -47,75 +47,52 @@ public class PlayerController : MonoBehaviour
         }
 
         // Turns left
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && !rotatingLeft)
         {
             rotatingLeft = true;
-        }
-
-
-        // Resets the rotation variable when the rotation is complete
-        if (rotatingTimeLeft >= 0.1f)
-        {
-            rotatingLeft = false;
-            rotatingTimeLeft = 0.0f;
-        }
-
-        // Rotating the player 45 degrees to the left for a specific time
-        if (rotatingLeft && rotatingTimeLeft < 0.1f)
-        {
-            // Increment the rotatingTime
-            rotatingTimeLeft += Time.deltaTime;
-
-            // Calculate the interpolation factor based on the fraction of the rotating time elapsed
-            float t = Mathf.Clamp01(rotatingTimeLeft / 0.1f);
-
-            // Initalise the current rotation to the player's current rotation
-            Vector3 currentRotation = transform.rotation.eulerAngles;
-
-            // Minus 45 degrees to the Y axis rotation
-            currentRotation.y -= 45;
-
-            // Create euler rotation with transformed angle
-            Quaternion targetRotation = Quaternion.Euler(currentRotation);
-
-            // Rotate the player to the targetRotation
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, t);        
+            StartCoroutine(RotatePlayer(Vector3.up * -45f, 0.1f, () => rotatingLeft = false));
         }
 
         // Turns right
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && !rotatingRight)
         {
             rotatingRight = true;
+            StartCoroutine(RotatePlayer(Vector3.up * 45f, 0.1f, () => rotatingRight = false));
+        }
+    }
+
+    // Rotation function
+    IEnumerator RotatePlayer(Vector3 rotationAmount, float duration, System.Action onComplete = null)
+    {
+        // Intialises the elapsed time
+        float elapsed = 0f;
+
+        // Initialises the initial rotation
+        Quaternion initialRotation = transform.rotation;
+
+        // Calculate the rotation after the the rotationAmount is applied
+        Quaternion targetRotation = Quaternion.Euler(rotationAmount) * initialRotation;
+
+        // Loops until the time reaches the duration
+        while (elapsed < duration)
+        {
+            // Increment the time
+            elapsed += Time.deltaTime;
+
+            // Calculate the interpolation factor based on the ratio of time elapsed and the total duration
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            // Rotate the player to the target rotation
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
+
+            // Waits for the next frame
+            yield return null;
         }
 
-
-        // Resets the rotation variable when the rotation is complete
-        if (rotatingTimeRight >= 0.1f)
+        // Notifies the code that the rotation is complete
+        if (onComplete != null)
         {
-            rotatingRight = false;
-            rotatingTimeRight = 0.0f;
-        }
-
-        // Rotating the player 45 degrees to the right for a specific time
-        if (rotatingRight && rotatingTimeRight < 0.1f)
-        {
-            // Increment the rotatingTime
-            rotatingTimeRight += Time.deltaTime;
-
-            // Calculate the interpolation factor based on the fraction of the rotating time elapsed
-            float t = Mathf.Clamp01(rotatingTimeRight / 0.1f);
-
-            // Initalise the current rotation to the player's current rotation
-            Vector3 currentRotation = transform.rotation.eulerAngles;
-
-            // Add 45 degrees to the Y axis rotation
-            currentRotation.y += 45;
-
-            // Create euler rotation with transformed angle
-            Quaternion targetRotation = Quaternion.Euler(currentRotation);
-
-            // Rotate the player to the targetRotation
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, t);
+            onComplete.Invoke();
         }
     }
 }
