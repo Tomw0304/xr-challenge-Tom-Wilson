@@ -85,6 +85,9 @@ public class PlayerController : MonoBehaviour
             // Rotate the player to the target rotation
             transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, t);
 
+            // Transfer velocity into the new direction
+            rb.velocity = transform.forward * rb.velocity.magnitude;
+
             // Waits for the next frame
             yield return null;
         }
