@@ -47,14 +47,14 @@ public class PlayerController : MonoBehaviour
         }
 
         // Turns left
-        if (Input.GetKey(KeyCode.A) && !rotatingLeft)
+        if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft)
         {
             rotatingLeft = true;
             StartCoroutine(RotatePlayer(Vector3.up * -45f, 0.1f, () => rotatingLeft = false));
         }
 
         // Turns right
-        if (Input.GetKey(KeyCode.D) && !rotatingRight)
+        if (Input.GetKeyDown(KeyCode.D) && !rotatingRight)
         {
             rotatingRight = true;
             StartCoroutine(RotatePlayer(Vector3.up * 45f, 0.1f, () => rotatingRight = false));
