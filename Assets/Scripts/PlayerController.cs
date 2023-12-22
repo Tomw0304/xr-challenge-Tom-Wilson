@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = transform.forward;
             }
             // Accelerate inbetween the start and reaching a top speed
-            else if (rb.velocity.magnitude < 100f)
+            else if (rb.velocity.magnitude < 50f)
             {
                 rb.AddForce(transform.forward * 100);
             }
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
         // Move backward
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForce(-transform.forward * 1000);
+            rb.AddForce(-transform.forward * 10);
         }
 
         // Turns left
