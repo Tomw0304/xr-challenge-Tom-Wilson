@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // If the players moving drag is applied 
-        if (rb.velocity.magnitude > 0)
+        if (!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && rb.velocity.magnitude > 0)
         {
             rb.AddForce(-rb.velocity.normalized);
         }
