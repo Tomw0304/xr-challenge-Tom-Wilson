@@ -59,6 +59,12 @@ public class PlayerController : MonoBehaviour
             rotatingRight = true;
             StartCoroutine(RotatePlayer(Vector3.up * 45f, 0.1f, () => rotatingRight = false));
         }
+
+        // If the players moving drag is applied 
+        if (rb.velocity.magnitude > 0)
+        {
+            rb.AddForce(-rb.velocity.normalized);
+        }
     }
 
     // Rotation function
