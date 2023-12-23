@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.W))
         {
             // Use velovity at lower speed to create an instant start and at the max speed to cap the speed
-            if (rb.velocity.magnitude < 1f)
+            if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 1f)
             {
                 rb.velocity = transform.forward;
             }
@@ -43,7 +43,14 @@ public class PlayerController : MonoBehaviour
         // Move backward
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForce(-transform.forward * 10);
+            if (Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
+            {
+                rb.AddForce(-transform.forward);
+            }
+            else if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 10f)
+            {
+                rb.AddForce(-transform.forward * 10);
+            }
         }
 
         // Turns left
