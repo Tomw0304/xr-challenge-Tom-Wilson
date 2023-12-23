@@ -731,11 +731,11 @@ PlayerSettings:
   apiCompatibilityLevel: 3
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 
+  cloudProjectId: 279c6324-b9e9-4d79-8581-fdbe8af16b74
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: xr-challenge-Tom-Wilson
+  organizationId: tomwilson16
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 1
   playerDataPath: 
