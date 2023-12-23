@@ -5,10 +5,10 @@ using UnityEngine;
 public class WallRotateManager : MonoBehaviour
 {
     // Runs when a collision occurs
-    void OnCollisionEnter(Collision collisionObject)
+    void OnTriggerEnter(Collider collisionObject)
     {
         // Create a new variable to store the rigidbody of the collision object
-        Rigidbody rb = collisionObject.collider.GetComponent<Rigidbody>();
+        Rigidbody rb = collisionObject.GetComponent<Rigidbody>();
 
         // Checks if the collision object has a transform and a rigibody
         if (collisionObject.transform != null && rb != null)
