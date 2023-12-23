@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
         // Move backward
         if (Input.GetKey(KeyCode.S))
         {
-            if (Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
+            if (rb.velocity.magnitude == 0 || Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
             {
                 rb.AddForce(-transform.forward);
             }
