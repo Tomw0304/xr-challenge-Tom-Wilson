@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
         // Move forward
         if (Input.GetKey(KeyCode.W))
         {
-            if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 50f)
+            if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
             {
                 rb.AddForce(transform.forward * 100);
             } else if (rb.velocity.magnitude == 0)
@@ -54,14 +54,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft)
         {
             rotatingLeft = true;
-            StartCoroutine(RotatePlayer(Vector3.up * -45f, 0.1f, () => rotatingLeft = false));
+            StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
         }
 
         // Turns right
         if (Input.GetKeyDown(KeyCode.D) && !rotatingRight)
         {
             rotatingRight = true;
-            StartCoroutine(RotatePlayer(Vector3.up * 45f, 0.1f, () => rotatingRight = false));
+            StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
         }
 
         // If the players moving drag is applied 
