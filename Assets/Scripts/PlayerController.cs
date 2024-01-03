@@ -115,4 +115,12 @@ public class PlayerController : MonoBehaviour
             onComplete.Invoke();
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
+    }
+
+
+
 }
