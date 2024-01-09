@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,16 +17,30 @@ public class PlayerController : MonoBehaviour
     private float rotatingTimeLeft = 0.0f;
     private float rotatingTimeRight = 0.0f;
 
-    // stores whether the player is facing forward (any of the multiple 90) or facing left or right (-45 or 45 degrees from a mulitple of 90 respectively)
+    // Stores whether the player is facing forward (any of the multiple 90) or facing left or right (-45 or 45 degrees from a mulitple of 90 respectively)
     // The key: forward (side = 0), left (side = -1), right (side = 1)
     private int side;
+
+    // Points UI variable
+    public TextMeshProUGUI pointsText;
+
+    // Points variable
+    private int points;
 
     // Start is called before the first frame update
     void Start()
     {
-        //initialise the rigidbody variable
+        // Initialise the rigidbody variable
         rb = GetComponent<Rigidbody>();
+
+        // Initialise the side to be the forward value
         side = 0;
+
+        // Intialise the points
+        points = 0;
+
+        // Intialise the points text
+        pointsText.text = "Points: " + points.ToString();
     }
 
     // Updates every frame
@@ -157,22 +172,27 @@ public class PlayerController : MonoBehaviour
             // Check if either is close to 45 degrees (within a threshold)
             if (side == -1)
             {
-                Debug.Log("left");
                 StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
             }
             else if (side == 1)
             {
-                Debug.Log("right");
                 StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
             }
             else if (side == 0)
             {
-                Debug.Log("forward");
                 StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
             }
 
             // run the corountine to reset the rotatingwall bool
             StartCoroutine(ResetRotatingWall());
+        } 
+        else if (other.CompareTag("Pickup"))
+        {
+            // Incremenet the points
+            points++;
+
+            // Updates the points UI text
+            pointsText.text = "Points: " + points.ToString();
         }
     }
 
