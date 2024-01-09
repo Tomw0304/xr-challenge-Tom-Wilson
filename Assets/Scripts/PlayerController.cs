@@ -145,31 +145,35 @@ public class PlayerController : MonoBehaviour
     // When entering the trigger collider of the wall
     private void OnTriggerEnter(Collider other)
     {
-        // set the boolean storing whether the function is running
-        rotatingWall = true;
-
-        // round the rotation to the nearest 45
-        transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
-
-        // Check if either is close to 45 degrees (within a threshold)
-        if (side == -1)
+        // Checks if the collided object is has the floor
+        if (other.CompareTag("Floor"))
         {
-            Debug.Log("left");
-            StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
-        }
-        else if (side == 1)
-        {
-            Debug.Log("right");
-            StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
-        }
-        else if (side == 0)
-        {
-            Debug.Log("forward");
-            StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
-        }
+            // set the boolean storing whether the function is running
+            rotatingWall = true;
 
-        // run the corountine to reset the rotatingwall bool
-        StartCoroutine(ResetRotatingWall());
+            // round the rotation to the nearest 45
+            transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
+
+            // Check if either is close to 45 degrees (within a threshold)
+            if (side == -1)
+            {
+                Debug.Log("left");
+                StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
+            }
+            else if (side == 1)
+            {
+                Debug.Log("right");
+                StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
+            }
+            else if (side == 0)
+            {
+                Debug.Log("forward");
+                StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
+            }
+
+            // run the corountine to reset the rotatingwall bool
+            StartCoroutine(ResetRotatingWall());
+        }
     }
 
     // function to reset the rotatingwall bool
