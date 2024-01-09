@@ -7,19 +7,25 @@ public class PlayerController : MonoBehaviour
     // Create variable to store the rigidbody of the player
     private Rigidbody rb;
 
-    // Initialise two boolean variables to store whether the player is rotated left or right
+    // Initialise two boolean variables to store whether the player is rotating left or right
     private bool rotatingLeft = false;
     private bool rotatingRight = false;
+    private bool rotatingWall = false;
 
     // Initialise two variables to store the time since the start of the rotation left or right
     private float rotatingTimeLeft = 0.0f;
     private float rotatingTimeRight = 0.0f;
+
+    // stores whether the player is facing forward (any of the multiple 90) or facing left or right (-45 or 45 degrees from a mulitple of 90 respectively)
+    // The key: forward (side = 0), left (side = -1), right (side = 1)
+    private int side;
 
     // Start is called before the first frame update
     void Start()
     {
         //initialise the rigidbody variable
         rb = GetComponent<Rigidbody>();
+        side = 0;
     }
 
     // Updates every frame
@@ -50,18 +56,38 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Turns left
-        if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft)
+        // locks the side to side controls when traversing a wall
+        if (!rotatingWall)
         {
-            rotatingLeft = true;
-            StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
-        }
+            // Turns left
+            if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft && !rotatingRight)
+            {
+                rotatingLeft = true;
+                StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
+                if (side == -1 || side == 1)
+                {
+                    side = 0;
+                }
+                else
+                {
+                    side = -1;
+                }
+            }
 
-        // Turns right
-        if (Input.GetKeyDown(KeyCode.D) && !rotatingRight)
-        {
-            rotatingRight = true;
-            StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
+            // Turns right
+            if (Input.GetKeyDown(KeyCode.D) && !rotatingRight && !rotatingLeft)
+            {
+                rotatingRight = true;
+                StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
+                if (side == -1 || side == 1)
+                {
+                    side = 0;
+                }
+                else
+                {
+                    side = 1;
+                }
+            }
         }
 
         // If the players moving drag is applied 
@@ -116,11 +142,47 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // When entering the trigger collider of the wall
     private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
+        // set the boolean storing whether the function is running
+        rotatingWall = true;
+
+        // round the rotation to the nearest 45
+        transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
+
+        // Check if either is close to 45 degrees (within a threshold)
+        if (side == -1)
+        {
+            Debug.Log("left");
+            StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
+        }
+        else if (side == 1)
+        {
+            Debug.Log("right");
+            StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
+        }
+        else if (side == 0)
+        {
+            Debug.Log("forward");
+            StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
+        }
+
+        // run the corountine to reset the rotatingwall bool
+        StartCoroutine(ResetRotatingWall());
     }
 
+    // function to reset the rotatingwall bool
+    private IEnumerator ResetRotatingWall()
+    {
+        // waits 0.1 seconds before reseting the rotatingWall bool
+        yield return new WaitForSeconds(0.1f);
+        rotatingWall = false;
+    }
 
-
+    // rounds angle to nearest multiple of 45 degrees
+    float RoundToNearest45(float angle)
+    {
+        return Mathf.Round(angle / 45f) * 45f;
+    }
 }
