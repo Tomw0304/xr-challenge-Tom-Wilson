@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Floor
   - Pickup
+  - Winning area
   layers:
   - Default
   - TransparentFX
