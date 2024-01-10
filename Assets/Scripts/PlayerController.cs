@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     // Point Light variable
     public Light pointLight;
 
+    // Stores whether the game is won and initialise it as false
+    private bool won = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,69 +64,74 @@ public class PlayerController : MonoBehaviour
     // Updates every frame
     void Update()
     {
-        // Move forward
-        if (Input.GetKey(KeyCode.W))
+        // Lets the player move if they haven't won
+        if (!won)
         {
-            if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
+            // Move forward
+            if (Input.GetKey(KeyCode.W))
             {
-                rb.AddForce(transform.forward * 100);
-            } else if (rb.velocity.magnitude == 0)
-            {
-                rb.velocity = transform.forward * 10;
-            }
-        }
-
-        // Move backward
-        if (Input.GetKey(KeyCode.S))
-        {
-            if (rb.velocity.magnitude == 0 || Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
-            {
-                rb.AddForce(-transform.forward);
-            }
-            else if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 10f)
-            {
-                rb.AddForce(-transform.forward * 10);
-            }
-        }
-
-        // locks the side to side controls when traversing a wall
-        if (!rotatingWall)
-        {
-            // Turns left
-            if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft && !rotatingRight)
-            {
-                rotatingLeft = true;
-                StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
-                if (side == -1 || side == 1)
+                if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
                 {
-                    side = 0;
+                    rb.AddForce(transform.forward * 100);
                 }
-                else
+                else if (rb.velocity.magnitude == 0)
                 {
-                    side = -1;
+                    rb.velocity = transform.forward * 10;
                 }
             }
 
-            // Turns right
-            if (Input.GetKeyDown(KeyCode.D) && !rotatingRight && !rotatingLeft)
+            // Move backward
+            if (Input.GetKey(KeyCode.S))
             {
-                rotatingRight = true;
-                StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
-                if (side == -1 || side == 1)
+                if (rb.velocity.magnitude == 0 || Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
                 {
-                    side = 0;
+                    rb.AddForce(-transform.forward);
                 }
-                else
+                else if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 10f)
                 {
-                    side = 1;
+                    rb.AddForce(-transform.forward * 10);
                 }
             }
-        }
 
-        // If the players moving drag is applied 
-        if (!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && rb.velocity.magnitude > 0)
-        {
-            rb.AddForce(-rb.velocity.normalized);
+            // locks the side to side controls when traversing a wall
+            if (!rotatingWall)
+            {
+                // Turns left
+                if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft && !rotatingRight)
+                {
+                    rotatingLeft = true;
+                    StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
+                    if (side == -1 || side == 1)
+                    {
+                        side = 0;
+                    }
+                    else
+                    {
+                        side = -1;
+                    }
+                }
+
+                // Turns right
+                if (Input.GetKeyDown(KeyCode.D) && !rotatingRight && !rotatingLeft)
+                {
+                    rotatingRight = true;
+                    StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
+                    if (side == -1 || side == 1)
+                    {
+                        side = 0;
+                    }
+                    else
+                    {
+                        side = 1;
+                    }
+                }
+            }
+
+            // If the players moving drag is applied 
+            if (!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && rb.velocity.magnitude > 0)
+            {
+                rb.AddForce(-rb.velocity.normalized);
+            }
         }
     }
 
@@ -221,6 +229,20 @@ public class PlayerController : MonoBehaviour
                     spotlight.intensity = 1000;
                     lightParticles.Play();
                 }
+            }
+        }
+        // Checks if the trigger area is the winning area
+        else if (other.CompareTag("Winning area"))
+        {
+            // Checks if the points has reached the max
+            if (points == 5)
+            {
+                // Sets the won boolean to true
+                won = true;
+
+                // Place the player in the centre with no velocity
+                transform.position = Vector3.up;
+                rb.velocity = Vector3.zero;
             }
         }
     }
