@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = transform.forward * rb.velocity.magnitude;
             }
-            else
+            else if(!rotatingWall)
             {
                 rb.velocity = -transform.forward * rb.velocity.magnitude;
             }
