@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     // Create variable to store the rigidbody of the player
     private Rigidbody rb;
 
-    // Initialise two boolean variables to store whether the player is rotating left or right
+    // Create and initialise boolean variables to store whether the player is rotating left or right or up the wall
     private bool rotatingLeft = false;
     private bool rotatingRight = false;
     private bool rotatingWall = false;
 
-    // Initialise two variables to store the time since the start of the rotation left or right
+    // Create and initialise two variables to store the time since the start of the rotation left or right
     private float rotatingTimeLeft = 0.0f;
     private float rotatingTimeRight = 0.0f;
 
@@ -26,6 +26,15 @@ public class PlayerController : MonoBehaviour
 
     // Points variable
     private int points;
+
+    // Particle system for the spotlight 
+    public ParticleSystem lightParticles;
+
+    // Spotlight variable
+    public Light spotlight;
+
+    // Point Light variable
+    public Light pointLight;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +50,12 @@ public class PlayerController : MonoBehaviour
 
         // Intialise the points text
         pointsText.text = "Points: " + points.ToString();
+
+        // Spotlight initialises as zero
+        spotlight.intensity = 0;
+
+        // Point light is initialises as 5
+        pointLight.intensity = 5;
     }
 
     // Updates every frame
@@ -186,13 +201,27 @@ public class PlayerController : MonoBehaviour
             // run the corountine to reset the rotatingwall bool
             StartCoroutine(ResetRotatingWall());
         } 
+        // Checks the collider to see if it is a pickup
         else if (other.CompareTag("Pickup"))
         {
-            // Incremenet the points
-            points++;
+            // Checks if the points is the range
+            if (points < 5)
+            {
+                // Incremenet the points
+                points++;
 
-            // Updates the points UI text
-            pointsText.text = "Points: " + points.ToString();
+                // Updates the points UI text
+                pointsText.text = "Points: " + points.ToString();
+
+                // Checks if points is at max value
+                if (points == 5)
+                {
+                    // Turns off point light and turns on spotlight with particle effect
+                    pointLight.intensity = 0;
+                    spotlight.intensity = 1000;
+                    lightParticles.Play();
+                }
+            }
         }
     }
 
