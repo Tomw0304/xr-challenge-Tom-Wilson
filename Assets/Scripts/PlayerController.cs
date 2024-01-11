@@ -70,6 +70,7 @@ public class PlayerController : MonoBehaviour
             // Move forward
             if (Input.GetKey(KeyCode.W))
             {
+                // Accelerate if the speed is less 100 and above 0.5 else add velocity
                 if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
                 {
                     rb.AddForce(transform.forward * 100);
@@ -83,6 +84,7 @@ public class PlayerController : MonoBehaviour
             // Move backward
             if (Input.GetKey(KeyCode.S))
             {
+                // Accelerate if the speed is less 100 and above 0.5 else add velocity
                 if (rb.velocity.magnitude == 0 || Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
                 {
                     rb.AddForce(-transform.forward);
@@ -99,8 +101,11 @@ public class PlayerController : MonoBehaviour
                 // Turns left
                 if (Input.GetKeyDown(KeyCode.A) && !rotatingLeft && !rotatingRight)
                 {
+                    // Boolean of turning left set
                     rotatingLeft = true;
+                    // Rotate the player -45 degrees in 0.1 seconds
                     StartCoroutine(RotatePlayer(transform.up * -45f, 0.1f, () => rotatingLeft = false));
+                    // Set the side value
                     if (side == -1 || side == 1)
                     {
                         side = 0;
@@ -114,8 +119,11 @@ public class PlayerController : MonoBehaviour
                 // Turns right
                 if (Input.GetKeyDown(KeyCode.D) && !rotatingRight && !rotatingLeft)
                 {
+                    // Boolean of turning left set
                     rotatingRight = true;
+                    // Rotate the player -45 degrees in 0.1 seconds
                     StartCoroutine(RotatePlayer(transform.up * 45f, 0.1f, () => rotatingRight = false));
+                    // Set the side value
                     if (side == -1 || side == 1)
                     {
                         side = 0;
