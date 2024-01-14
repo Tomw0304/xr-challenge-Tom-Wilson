@@ -161,6 +161,15 @@ public class PlayerController : MonoBehaviour
             // Increment the time
             elapsed += Time.deltaTime;
 
+            if ((rotatingLeft || rotatingRight) && rotatingWall)
+            {
+                transform.rotation = targetRotation;
+
+                rb.velocity = transform.forward * rb.velocity.magnitude;
+
+                break;
+            }
+
             // Calculate the interpolation factor based on the ratio of time elapsed and the total duration
             float t = Mathf.Clamp01(elapsed / duration);
 
