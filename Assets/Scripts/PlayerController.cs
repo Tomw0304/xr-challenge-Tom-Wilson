@@ -13,10 +13,6 @@ public class PlayerController : MonoBehaviour
     private bool rotatingRight = false;
     private bool rotatingWall = false;
 
-    // Create and initialise two variables to store the time since the start of the rotation left or right
-    private float rotatingTimeLeft = 0.0f;
-    private float rotatingTimeRight = 0.0f;
-
     // Stores whether the player is facing forward (any of the multiple 90) or facing left or right (-45 or 45 degrees from a mulitple of 90 respectively)
     // The key: forward (side = 0), left (side = -1), right (side = 1)
     private int side;
@@ -75,7 +71,7 @@ public class PlayerController : MonoBehaviour
                 {
                     rb.AddForce(transform.forward * 100);
                 }
-                else if (rb.velocity.magnitude == 0)
+                else 
                 {
                     rb.velocity = transform.forward * 10;
                 }
@@ -85,13 +81,13 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.S))
             {
                 // Accelerate if the speed is less 100 and above 0.5 else add velocity
-                if (rb.velocity.magnitude == 0 || Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
+                if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
                 {
-                    rb.AddForce(-transform.forward);
+                    rb.AddForce(-transform.forward * 100);
                 }
-                else if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 10f)
+                else 
                 {
-                    rb.AddForce(-transform.forward * 10);
+                    rb.velocity = -transform.forward * 10;
                 }
             }
 
