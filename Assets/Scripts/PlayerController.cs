@@ -277,4 +277,11 @@ public class PlayerController : MonoBehaviour
     {
         return Mathf.Round(angle / 45f) * 45f;
     }
+
+    // when colliding with an object
+    private void OnCollisionEnter()
+    {
+        // round the rotation to the nearest 45 degrees
+        transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
+    }
 }
