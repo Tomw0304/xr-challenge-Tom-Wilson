@@ -67,7 +67,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 // Accelerate if the speed is less 100 and above 0.5 else add velocity
-                if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
+                if (rb.velocity.magnitude >= 100f)
+                {
+                    rb.velocity = transform.forward * 100;
+                }
+                else if ((Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f))
                 {
                     rb.AddForce(transform.forward * 100);
                 }
