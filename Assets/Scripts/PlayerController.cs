@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
             // Move forward
             if (Input.GetKey(KeyCode.W))
             {
-                // Accelerate if the speed is less 100 and above 0.5 else add velocity
+                // Accelerate if the speed is less 100 and above 0.5 else add velocity and moving forward
                 if (rb.velocity.magnitude >= 100f)
                 {
                     rb.velocity = transform.forward * 100;
@@ -84,7 +84,7 @@ public class PlayerController : MonoBehaviour
             // Move backward
             if (Input.GetKey(KeyCode.S))
             {
-                // Accelerate if the speed is less 100 and above 0.5 else add velocity
+                // Accelerate if the speed is less 100 and above 0.5 else add velocity and moving backward
                 if ((Vector3.Dot(rb.velocity.normalized, -transform.forward.normalized) > 0.5f) && rb.velocity.magnitude < 100f)
                 {
                     rb.AddForce(-transform.forward * 100);
@@ -200,8 +200,8 @@ public class PlayerController : MonoBehaviour
     // When entering the trigger collider of the wall
     private void OnTriggerEnter(Collider other)
     {
-        // Checks if the collided object is has the floor
-        if (other.CompareTag("Floor"))
+        // Checks if the collided object is has the floor and is not the start of the game
+        if (other.CompareTag("Floor") && Time.time > 0f)
         {
             // set the boolean storing whether the function is running
             rotatingWall = true;
@@ -209,18 +209,27 @@ public class PlayerController : MonoBehaviour
             // round the rotation to the nearest 45
             transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
 
+            // variable to store what angle to rotate
+            float rotationAngle = 90;
+
+            // changes rotationAngle based on whether the player is moving forward
+            if (Vector3.Dot(rb.velocity.normalized, transform.forward.normalized) > 0.5f)
+            {
+                rotationAngle = -90f;
+            }
+
             // Check if either is close to 45 degrees (within a threshold)
             if (side == -1)
             {
-                StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
+                StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * rotationAngle, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => side = 1))))));
             }
             else if (side == 1)
             {
-                StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * -90f, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
+                StartCoroutine(RotatePlayer(transform.up * -45f, 0.01f, () => StartCoroutine(RotatePlayer(transform.right * rotationAngle, 0.01f, () => StartCoroutine(RotatePlayer(transform.up * 45f, 0.01f, () => side = -1))))));
             }
             else if (side == 0)
             {
-                StartCoroutine(RotatePlayer(transform.right * -90f, 0.1f));
+                StartCoroutine(RotatePlayer(transform.right * rotationAngle, 0.1f));
             }
 
             // run the corountine to reset the rotatingwall bool
