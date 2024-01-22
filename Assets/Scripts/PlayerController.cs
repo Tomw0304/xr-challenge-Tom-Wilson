@@ -161,15 +161,6 @@ public class PlayerController : MonoBehaviour
             // Increment the time
             elapsed += Time.deltaTime;
 
-            if ((rotatingLeft || rotatingRight) && rotatingWall)
-            {
-                transform.rotation = targetRotation;
-
-                rb.velocity = transform.forward * rb.velocity.magnitude;
-
-                break;
-            }
-
             // Calculate the interpolation factor based on the ratio of time elapsed and the total duration
             float t = Mathf.Clamp01(elapsed / duration);
 
@@ -205,7 +196,7 @@ public class PlayerController : MonoBehaviour
         {
             // set the boolean storing whether the function is running
             rotatingWall = true;
-
+            
             // round the rotation to the nearest 45
             transform.rotation = Quaternion.Euler(RoundToNearest45(transform.rotation.eulerAngles.x), RoundToNearest45(transform.rotation.eulerAngles.y), RoundToNearest45(transform.rotation.eulerAngles.z));
 
@@ -246,6 +237,8 @@ public class PlayerController : MonoBehaviour
 
                 // Updates the points UI text
                 pointsText.text = "Points: " + points.ToString();
+
+                Destroy(other);
 
                 // Checks if points is at max value
                 if (points == 5)
