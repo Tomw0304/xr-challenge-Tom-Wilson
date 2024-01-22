@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,11 +12,21 @@ public class GameManager : MonoBehaviour
     public GameObject gameUI;
     public GameObject pauseUI;
 
+    // variable to store the playerController
+    private PlayerController playerController;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Finds the playerController scripts
+        playerController = FindObjectOfType<PlayerController>();
+    }
+
     // Update is called once per frame
     void Update()
     {
         // Toggles pausing based on escape button
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) || !PlayerController.won)
         {
             TogglePause();
         }
@@ -40,5 +51,11 @@ public class GameManager : MonoBehaviour
             gameUI.SetActive(true);
             pauseUI.SetActive(false);
         }
+    }
+
+    // Restarts the level
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
