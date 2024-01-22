@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // Toggles pausing based on escape button
-        if (Input.GetKeyDown(KeyCode.Escape) || !PlayerController.won)
+        if (Input.GetKeyDown(KeyCode.Escape) && !PlayerController.won)
         {
             TogglePause();
         }
