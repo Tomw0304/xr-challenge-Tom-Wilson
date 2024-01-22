@@ -33,7 +33,11 @@ public class PlayerController : MonoBehaviour
     public Light pointLight;
 
     // Stores whether the game is won and initialise it as false
-    private bool won = false;
+    public static bool won = false;
+
+    // Variables to store the game UI and the winning UI
+    public GameObject gameUI;
+    public GameObject winningUI;
 
     // Start is called before the first frame update
     void Start()
@@ -262,6 +266,10 @@ public class PlayerController : MonoBehaviour
                 // Place the player in the centre with no velocity
                 transform.position = Vector3.up;
                 rb.velocity = Vector3.zero;
+
+                // Disables the gameUI and enables the winningUI
+                gameUI.SetActive(false);
+                winningUI.SetActive(true);
             }
         }
     }
