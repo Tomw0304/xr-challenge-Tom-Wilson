@@ -56,6 +56,8 @@ public class GameManager : MonoBehaviour
     // Restarts the level
     public void Restart()
     {
+        // Resets the won condition
+        PlayerController.won = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
