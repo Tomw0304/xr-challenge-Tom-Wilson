@@ -17,8 +17,11 @@ public class PlayerController : MonoBehaviour
     // The key: forward (side = 0), left (side = -1), right (side = 1)
     private int side;
 
-    // Points UI variable
+    // Points text variable
     public TextMeshProUGUI pointsText;
+
+    // Timer text variable
+    public TextMeshProUGUI timerText;
 
     // Points variable
     private int points;
@@ -72,6 +75,9 @@ public class PlayerController : MonoBehaviour
         // Lets the player move if they haven't won
         if (!won)
         {
+            // Update the timer
+            timerText.text = (Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f).ToString();
+
             // Move forward
             if (Input.GetKey(KeyCode.W))
             {
