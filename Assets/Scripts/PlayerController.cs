@@ -39,6 +39,9 @@ public class PlayerController : MonoBehaviour
     public GameObject gameUI;
     public GameObject winningUI;
 
+    // Stores the time the scene starts
+    private float sceneStartTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +62,8 @@ public class PlayerController : MonoBehaviour
 
         // Point light is initialises as 5
         pointLight.intensity = 5;
+
+        sceneStartTime = Time.time;
     }
 
     // Updates every frame
@@ -196,7 +201,7 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // Checks if the collided object is has the floor and is not the start of the game
-        if (other.CompareTag("Floor") && Time.time > 0f)
+        if (other.CompareTag("Floor") && (Time.time - sceneStartTime) > 0f)
         {
             // set the boolean storing whether the function is running
             rotatingWall = true;
