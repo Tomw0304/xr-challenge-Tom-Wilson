@@ -10,6 +10,9 @@ public class MainMenuCameraController : MonoBehaviour
     // Angle variable
     private float angle = 0f;
 
+    // Variable to store the player transfom
+    public Transform playerTransform;
+
     // Update is called once per frame
     void Update()
     {
@@ -22,5 +25,8 @@ public class MainMenuCameraController : MonoBehaviour
 
         // Changes the position using the new coordinates
         transform.position = new Vector3(x, transform.position.y, z);
+
+        // Make the camera face the player
+        transform.LookAt(playerTransform);
     }
 }
