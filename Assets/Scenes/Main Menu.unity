@@ -444,7 +444,6 @@ GameObject:
   - component: {fileID: 462615438}
   - component: {fileID: 462615437}
   - component: {fileID: 462615436}
-  - component: {fileID: 462615435}
   - component: {fileID: 462615434}
   m_Layer: 0
   m_Name: Spaceship
@@ -467,24 +466,6 @@ CapsuleCollider:
   m_Height: 0.32853347
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &462615435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 462615433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 296a9cfbc4ab9e24fa92fc9a9155ad3e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pointsText: {fileID: 0}
-  lightParticles: {fileID: 0}
-  spotlight: {fileID: 0}
-  pointLight: {fileID: 0}
-  gameUI: {fileID: 0}
-  winningUI: {fileID: 0}
 --- !u!54 &462615436
 Rigidbody:
   m_ObjectHideFlags: 0
