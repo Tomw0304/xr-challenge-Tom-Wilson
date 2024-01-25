@@ -5,7 +5,7 @@ using UnityEngine;
 public class MainMenuCameraController : MonoBehaviour
 {
     // Radius variable
-    private float r = 5f;
+    private float r = 2f;
 
     // Angle variable
     private float angle = 0f;
@@ -17,7 +17,7 @@ public class MainMenuCameraController : MonoBehaviour
     void Update()
     {
         // Change the angle using the speed and the time
-        angle += Time.deltaTime;
+        angle += 0.2f * Time.deltaTime;
 
         // Calculate the new x and z coordinates
         float x = Mathf.Cos(angle) * r;
