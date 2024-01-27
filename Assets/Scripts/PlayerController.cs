@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         points = 0;
 
         // Intialise the points text
-        pointsText.text = "Points: " + points.ToString();
+        pointsText.text = "Stars: " + points.ToString();
 
         // Spotlight initialises as zero
         spotlight.intensity = 0;
