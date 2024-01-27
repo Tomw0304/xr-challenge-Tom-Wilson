@@ -279,7 +279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Points:'
+  m_text: 'Stars:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c63ea841ceb5807459ae24504f0d9c76, type: 2}
   m_sharedMaterial: {fileID: -7438989145796824894, guid: c63ea841ceb5807459ae24504f0d9c76,
