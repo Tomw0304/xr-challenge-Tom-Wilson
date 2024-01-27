@@ -58,6 +58,20 @@ public class GameManager : MonoBehaviour
     {
         // Resets the won condition
         PlayerController.won = false;
+
+        // Unpauses the game
+        paused = false;
+        Time.timeScale = 1;
+
+        // Reloads the scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // Exits to menu
+    public void Exit()
+    {
+        // Unpauses the game
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Main Menu");
     }
 }
