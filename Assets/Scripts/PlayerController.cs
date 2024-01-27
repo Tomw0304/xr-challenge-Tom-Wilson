@@ -23,6 +23,12 @@ public class PlayerController : MonoBehaviour
     // Timer text variable
     public TextMeshProUGUI timerText;
 
+    // Final time text variable
+    public TextMeshProUGUI finalTimeText;
+
+    // Quickest time text variable
+    public TextMeshProUGUI quickestTimeText;
+
     // Points variable
     private int points;
 
@@ -271,6 +277,23 @@ public class PlayerController : MonoBehaviour
             // Checks if the points has reached the max
             if (points == 5)
             {
+                // Checks if final time is the quickest and stores it in playerprefs
+                if (PlayerPrefs.HasKey("QuickestTime") && PlayerPrefs.GetFloat("QuickestTime") > (Time.time - sceneStartTime))
+                {
+                    PlayerPrefs.SetFloat("QuickestTime", Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f);
+                } 
+                // if playerprefs does not exist the time automatically is the quickest
+                else if (!PlayerPrefs.HasKey("QuickestTime"))
+                {
+                    PlayerPrefs.SetFloat("QuickestTime", Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f);
+                }
+
+                // Updates the final time
+                finalTimeText.text = "time: " + (Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f).ToString();
+
+                // Sets the quickest time text
+                quickestTimeText.text = "Quickest Time: " + PlayerPrefs.GetFloat("QuickestTime").ToString();
+
                 // Sets the won boolean to true
                 won = true;
 
