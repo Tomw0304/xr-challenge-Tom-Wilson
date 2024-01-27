@@ -72,6 +72,8 @@ public class GameManager : MonoBehaviour
     {
         // Unpauses the game
         Time.timeScale = 1;
+        // Sets won condition to false
+        PlayerController.won = false;
         SceneManager.LoadScene("Main Menu");
     }
 }
