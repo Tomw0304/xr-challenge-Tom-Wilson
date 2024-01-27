@@ -51,6 +51,16 @@ public class PlayerController : MonoBehaviour
     // Stores the time the scene starts
     private float sceneStartTime;
 
+    // Variable for the audio source
+    private AudioSource audioSource;
+
+    // AudioClips
+    public AudioClip oneX;
+    public AudioClip twoX;
+
+    // stores the last state for the audio clip level
+    private int lastState = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,7 +82,14 @@ public class PlayerController : MonoBehaviour
         // Point light is initialises as 5
         pointLight.intensity = 5;
 
+        // Reset the sceneStartTime
         sceneStartTime = Time.time;
+
+        // Gets the audio source component
+        audioSource = GetComponent<AudioSource>();
+
+        // Initialise pitch
+        audioSource.pitch = 1f;
     }
 
     // Updates every frame
@@ -115,6 +132,22 @@ public class PlayerController : MonoBehaviour
                     rb.velocity = -transform.forward * 10;
                 }
             }
+
+            // Update the pitch using the velocity
+            audioSource.pitch = 1 + rb.velocity.magnitude / 100;
+
+            // Change audio clips depending on the speed
+            int currentState = rb.velocity.magnitude > 50 ? 2 : 1;
+            
+            // Changes the clip and plays it once the speed is over a certain range
+            if (lastState != currentState)
+            {
+                audioSource.clip = currentState == 1 ? oneX : twoX;
+                audioSource.Play();
+            }
+
+            // Update the lastState
+            lastState = currentState;
 
             // locks the side to side controls when traversing a wall
             if (!rotatingWall)
@@ -277,6 +310,9 @@ public class PlayerController : MonoBehaviour
             // Checks if the points has reached the max
             if (points == 5)
             {
+                // Stops the audioSource
+                audioSource.Stop();
+
                 // Checks if final time is the quickest and stores it in playerprefs
                 if (PlayerPrefs.HasKey("QuickestTime") && PlayerPrefs.GetFloat("QuickestTime") > (Time.time - sceneStartTime))
                 {
