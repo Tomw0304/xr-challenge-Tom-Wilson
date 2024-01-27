@@ -27,6 +27,7 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     vSyncCount: 1
+    realtimeGICPUUsage: 25
     lodBias: 0.7
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -63,6 +64,7 @@ QualitySettings:
     realtimeReflectionProbes: 1
     billboardsFaceCameraPosition: 1
     vSyncCount: 1
+    realtimeGICPUUsage: 25
     lodBias: 2
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -84,6 +86,7 @@ QualitySettings:
     Nintendo Switch: 1
     PS4: 1
     PSP2: 0
+    Server: 0
     Standalone: 1
     Tizen: 0
     WebGL: 0
