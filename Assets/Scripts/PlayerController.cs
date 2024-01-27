@@ -292,7 +292,7 @@ public class PlayerController : MonoBehaviour
                 points++;
 
                 // Updates the points UI text
-                pointsText.text = "Points: " + points.ToString();
+                pointsText.text = "Stars: " + points.ToString();
 
                 // Destroys the pickup 
                 Destroy(other.gameObject);
