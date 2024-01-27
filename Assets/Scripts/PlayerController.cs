@@ -52,11 +52,13 @@ public class PlayerController : MonoBehaviour
     private float sceneStartTime;
 
     // Variable for the audio source
-    private AudioSource audioSource;
+    public AudioSource audioSourceEngine;
+    public AudioSource audioSourcePoints;
 
     // AudioClips
     public AudioClip oneX;
     public AudioClip twoX;
+    public AudioClip quickestSound;
 
     // stores the last state for the audio clip level
     private int lastState = 0;
@@ -85,11 +87,8 @@ public class PlayerController : MonoBehaviour
         // Reset the sceneStartTime
         sceneStartTime = Time.time;
 
-        // Gets the audio source component
-        audioSource = GetComponent<AudioSource>();
-
         // Initialise pitch
-        audioSource.pitch = 1f;
+        audioSourceEngine.pitch = 1f;
     }
 
     // Updates every frame
@@ -134,7 +133,7 @@ public class PlayerController : MonoBehaviour
             }
 
             // Update the pitch using the velocity
-            audioSource.pitch = 1 + rb.velocity.magnitude / 100;
+            audioSourceEngine.pitch = 1 + rb.velocity.magnitude / 100;
 
             // Change audio clips depending on the speed
             int currentState = rb.velocity.magnitude > 50 ? 2 : 1;
@@ -142,8 +141,8 @@ public class PlayerController : MonoBehaviour
             // Changes the clip and plays it once the speed is over a certain range
             if (lastState != currentState)
             {
-                audioSource.clip = currentState == 1 ? oneX : twoX;
-                audioSource.Play();
+                audioSourceEngine.clip = currentState == 1 ? oneX : twoX;
+                audioSourceEngine.Play();
             }
 
             // Update the lastState
@@ -283,6 +282,9 @@ public class PlayerController : MonoBehaviour
         // Checks the collider to see if it is a pickup
         else if (other.CompareTag("Pickup"))
         {
+            // Plays a pickup sound
+            audioSourcePoints.Play();
+
             // Checks if the points is the range
             if (points < 5)
             {
@@ -292,7 +294,8 @@ public class PlayerController : MonoBehaviour
                 // Updates the points UI text
                 pointsText.text = "Points: " + points.ToString();
 
-                Destroy(other);
+                // Destroys the pickup 
+                Destroy(other.gameObject);
 
                 // Checks if points is at max value
                 if (points == 5)
@@ -311,18 +314,23 @@ public class PlayerController : MonoBehaviour
             if (points == 5)
             {
                 // Stops the audioSource
-                audioSource.Stop();
+                audioSourceEngine.Stop();
 
                 // Checks if final time is the quickest and stores it in playerprefs
                 if (PlayerPrefs.HasKey("QuickestTime") && PlayerPrefs.GetFloat("QuickestTime") > (Time.time - sceneStartTime))
                 {
                     PlayerPrefs.SetFloat("QuickestTime", Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f);
+                    other.GetComponent<AudioSource>().clip = quickestSound;
                 } 
                 // if playerprefs does not exist the time automatically is the quickest
                 else if (!PlayerPrefs.HasKey("QuickestTime"))
                 {
                     PlayerPrefs.SetFloat("QuickestTime", Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f);
+                    other.GetComponent<AudioSource>().clip = quickestSound;
                 }
+
+                // Plays the winning sound
+                other.GetComponent<AudioSource>().Play();
 
                 // Updates the final time
                 finalTimeText.text = "time: " + (Mathf.Round((Time.time - sceneStartTime) * 100f) / 100f).ToString();
